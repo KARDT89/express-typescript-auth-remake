@@ -16,7 +16,7 @@ const registerSchema = z.object({
     role: z.enum(['customer', 'seller']).default('customer'),
   });
 
-class RegisterDto extends BaseDto {
+export class RegisterDto extends BaseDto {
   static schema = registerSchema;
 }
 

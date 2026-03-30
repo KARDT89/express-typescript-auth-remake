@@ -1,6 +1,6 @@
 import express from 'express';
 import type Express from 'express';
-import ApiResponse from './utils/api-response.js';
+import authRoutes from './auth/routes.js';
 
 export function createExpressApplication(): Express.Application {
   const app = express();
@@ -15,9 +15,7 @@ export function createExpressApplication(): Express.Application {
   });
 
   //routes
-  app.get('/', (req, res) => {
-    ApiResponse.ok(res, 'Welcome to the API');
-  });
+  app.use("/auth", authRoutes);
 
   return app;
 }
