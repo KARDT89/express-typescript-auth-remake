@@ -1,6 +1,6 @@
 import express from 'express';
 import type Express from 'express';
-import ApiResponse from '../utils/api-response.js';
+import ApiResponse from './utils/api-response.js';
 
 export function createExpressApplication(): Express.Application {
   const app = express();
