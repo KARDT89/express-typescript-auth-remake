@@ -39,4 +39,8 @@ const refresh = async (req: Request, res: Response) => {
   ApiResponse.ok(res, 'Token refreshed', { accessToken });
 }
 
-export { register, login, refresh };
+const me = async (req: Request, res: Response) => {
+  ApiResponse.ok(res, 'User profile', { user: req.user });
+}
+
+export { register, login, refresh, me };
