@@ -10,7 +10,7 @@ export const usersTable = pgTable('users', {
   email: varchar({ length: 322 }).notNull().unique(),
   isVerified: boolean('email-verified').notNull().default(false),
 
-  passwordHash: varchar('password', { length: 66 }).notNull(),
+  password: varchar('password', { length: 66 }).notNull(),
 
   role: rolesEnum().notNull().default('customer'),
 
@@ -19,6 +19,6 @@ export const usersTable = pgTable('users', {
   resetPasswordToken: varchar({ length: 66 }),
   resetPasswordExpires: timestamp(),
 
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date())
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').$onUpdate(() => new Date()),
 });
