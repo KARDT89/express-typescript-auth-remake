@@ -21,7 +21,22 @@ const login = async (req: Request, res: Response) => {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
-  ApiResponse.ok(res, 'Login success', { user, accessToken });
+  ApiResponse.ok(res, 'Login success', { user, accessToken, refreshToken });
 };
 
-export { register, login };
+const refresh = async (req: Request, res: Response) => {
+  const token = req.cookies.refreshToken;
+
+  const { accessToken, refreshToken } = await authService.refresh(token);
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+
+  ApiResponse.ok(res, 'Token refreshed', { accessToken });
+}
+
+export { register, login, refresh };

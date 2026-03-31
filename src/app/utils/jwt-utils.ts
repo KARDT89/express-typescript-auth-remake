@@ -10,8 +10,8 @@ const generateAccessToken = (payload: JwtPayload) => {
   });
 };
 
-const verifyAccessToken = (token: string) => {
-  return jwt.verify(token, process.env.JWT_ACCESS_SECRET!);
+const verifyAccessToken = (token: string) : JwtPayload => {
+  return jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as JwtPayload;
 };
 
 const generateRefreshToken = (payload: JwtPayload) => {
@@ -21,8 +21,8 @@ const generateRefreshToken = (payload: JwtPayload) => {
   });
 };
 
-const verifyRefreshToken = (token: string) => {
-  return jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
+const verifyRefreshToken = (token: string) : JwtPayload => {
+  return jwt.verify(token, process.env.JWT_REFRESH_SECRET!) as JwtPayload;
 };
 
 const generateResetToken = () => {

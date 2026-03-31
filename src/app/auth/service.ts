@@ -2,12 +2,14 @@ import { db } from '../../db/index.js';
 import { usersTable } from '../../db/schema.js';
 import ApiError from '../utils/api-errors.js';
 import { eq } from 'drizzle-orm';
-import crypto from 'crypto';
+import crypto, { hash } from 'crypto';
 import type { RegisterInput } from './dto/register.dto.js';
 import {
   generateAccessToken,
   generateRefreshToken,
   generateResetToken,
+  verifyAccessToken,
+  verifyRefreshToken,
 } from '../utils/jwt-utils.js';
 import { comparePassword, hashPassword } from '../utils/password-hashing.js';
 import type { LoginInput } from './dto/login.dto.js';
@@ -72,4 +74,31 @@ const login = async ({ email, password }: LoginInput) => {
   return { user: user.id, accessToken, refreshToken };
 };
 
-export { register, login };
+const refresh = async (token: string) => {
+  if (!token) throw ApiError.unauthorized('Refresh token missing');
+  const decoded = verifyRefreshToken(token);
+
+  const user = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.id, decoded.id));
+  if (user.length === 0) throw ApiError.unauthorized('User not found');
+
+  if (user[0]?.refreshToken !== hashToken(token)) {
+    throw ApiError.unauthorized('Invalid refresh token');
+  }
+  //generate new refreshtoken and access token
+  const newRefreshToken = generateRefreshToken({ id: user[0]!.id });
+  const accessToken = generateAccessToken({ id: user[0]!.id });
+  // hash the refresh token before saving to db
+
+  const hashedRefreshToken = hashToken(newRefreshToken);
+  await db
+    .update(usersTable)
+    .set({ refreshToken: hashedRefreshToken })
+    .where(eq(usersTable.id, user[0]!.id));
+
+  return { accessToken, refreshToken: newRefreshToken };
+};
+
+export { register, login, refresh };
