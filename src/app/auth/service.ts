@@ -78,10 +78,7 @@ const refresh = async (token: string) => {
   if (!token) throw ApiError.unauthorized('Refresh token missing');
   const decoded = verifyRefreshToken(token);
 
-  const user = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.id, decoded.id));
+  const user = await db.select().from(usersTable).where(eq(usersTable.id, decoded.id));
   if (user.length === 0) throw ApiError.unauthorized('User not found');
 
   if (user[0]?.refreshToken !== hashToken(token)) {
@@ -101,4 +98,13 @@ const refresh = async (token: string) => {
   return { accessToken, refreshToken: newRefreshToken };
 };
 
-export { register, login, refresh };
+const logout = async (userId: string) => {
+  const user = await db
+    .update(usersTable)
+    .set({ refreshToken: null })
+    .where(eq(usersTable.id, userId));
+
+  return { message: `user with ID ${userId} has been logged out` };
+};
+
+export { register, login, refresh, logout };

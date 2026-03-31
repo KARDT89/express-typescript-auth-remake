@@ -11,5 +11,6 @@ router.post('/register', validate(RegisterDto), controller.register);
 router.post('/login', validate(LoginDto), controller.login);
 router.post('/refresh', controller.refresh);
 router.get('/getMe', authenticate, authorize('seller', 'customer'), controller.me);
+router.post('/logout', authenticate, controller.logout);
 
 export default router;

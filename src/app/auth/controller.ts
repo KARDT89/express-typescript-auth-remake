@@ -43,4 +43,11 @@ const me = async (req: Request, res: Response) => {
   ApiResponse.ok(res, 'User profile', { user: req.user });
 }
 
-export { register, login, refresh, me };
+const logout = async (req: Request, res: Response) => {
+  const user = await authService.logout(req.user.id);
+  res.clearCookie('refreshToken');
+  res.clearCookie('accessToken');
+  ApiResponse.ok(res, 'Successfully logged out', user);
+}
+
+export { register, login, refresh, logout, me };
