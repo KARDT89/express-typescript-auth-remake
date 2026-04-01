@@ -17,7 +17,7 @@ export function createExpressApplication(): Express.Application {
   });
 
   //routes
-  app.use('/auth', authRoutes);
+  app.use('/api/auth', authRoutes);
 
   return app;
 }

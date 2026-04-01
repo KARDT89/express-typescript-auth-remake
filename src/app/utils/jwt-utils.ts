@@ -10,7 +10,7 @@ const generateAccessToken = (payload: JwtPayload) => {
   });
 };
 
-const verifyAccessToken = (token: string) : JwtPayload => {
+const verifyAccessToken = (token: string): JwtPayload => {
   return jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as JwtPayload;
 };
 
@@ -21,7 +21,7 @@ const generateRefreshToken = (payload: JwtPayload) => {
   });
 };
 
-const verifyRefreshToken = (token: string) : JwtPayload => {
+const verifyRefreshToken = (token: string): JwtPayload => {
   return jwt.verify(token, process.env.JWT_REFRESH_SECRET!) as JwtPayload;
 };
 
